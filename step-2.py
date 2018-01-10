@@ -72,9 +72,9 @@ if __name__ == "__main__":
                 sys.exit()
 
             while True:
-                message, channel = parse_slack_output(clients[bot['slack_key']].rtm_read(), bot)
+                message, channel = parse_slack_output(client.rtm_read(), bot)
                 if message and channel:
-                    handle_question(message, channel, bot, clients[bot['slack_key']])
+                    handle_question(message, channel, bot, client)
                 time.sleep(READ_WEBSOCKET_DELAY)
 
         except Exception as e:
