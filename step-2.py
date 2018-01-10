@@ -61,22 +61,15 @@ def parse_slack_output(slack_rtm_output, bot):
 
 
 if __name__ == "__main__":
+    client = SlackClient(SLACK_KEY)
+    if client.rtm_connect():
+        print("Connected")
+    else:
+        print("Failed to connect")
+        sys.exit()
+
     while True:
-        try:
-            client = SlackClient(SLACK_KEY)
-            if client.rtm_connect():
-                print("Connected")
-            else:
-                print("Failed to connect")
-                sys.exit()
-
-            while True:
-                message, channel = parse_slack_output(client.rtm_read(), bot)
-                if message and channel:
-                    handle_question(message, channel, bot, client)
-                time.sleep(READ_WEBSOCKET_DELAY)
-
-        except Exception as e:
-            print("Exception:", e)
-            time.sleep(30)
-            print("Attempting reconnection...")
+        message, channel = parse_slack_output(client.rtm_read(), bot)
+        if message and channel:
+            handle_question(message, channel, bot, client)
+        time.sleep(READ_WEBSOCKET_DELAY)
