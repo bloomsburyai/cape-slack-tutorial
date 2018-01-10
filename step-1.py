@@ -23,6 +23,8 @@ import os, sys, time
 from slackclient import SlackClient
 
 
+SLACK_KEY = 'myslackkey' # Your bot's Slack key
+BOT_ID = 'mybotid' # Your bot's Slack ID
 READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 
 
