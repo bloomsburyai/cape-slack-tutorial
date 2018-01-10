@@ -24,7 +24,6 @@ from slackclient import SlackClient
 from cape.client import CapeClient, CapeException
 
 
-BOT_NAME = 'mybot' # You bot's name
 CAPE_TOKEN = 'myusertoken' # Your Cape user token
 SLACK_KEY = 'myslackkey' # Your bot's Slack key
 BOT_ID = 'mybotid' # Your bot's Slack ID
