@@ -21,14 +21,27 @@
 
 import os, sys, time
 from slackclient import SlackClient
+from cape.client import CapeClient, CapeException
 
 
+BOT_NAME = 'mybot' # You bot's name
+CAPE_TOKEN = 'myusertoken' # Your Cape user token
+SLACK_KEY = 'myslackkey' # Your bot's Slack key
+BOT_ID = 'mybotid' # Your bot's Slack ID
 READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 
 
+cc = CapeClient()
+
+
 def handle_question(question, channel, bot, slack_client):
-    slack_client.api_call("chat.postMessage", channel=channel,
-                          text="Hello!", as_user=True)
+    answers = cc.answer(question, CAPE_TOKEN)
+    if len(answers) > 0:
+        slack_client.api_call("chat.postMessage", channel=channel,
+                              text="%s (confidence: %0.2f)" % (answers[0]['answerText'], answers[0]['confidence']), as_user=True)
+    else:
+        slack_client.api_call("chat.postMessage", channel=channel,
+                              text="Sorry! I don't know the answer to that.", as_user=True)
 
 
 def parse_slack_output(slack_rtm_output, bot):
@@ -59,9 +72,9 @@ if __name__ == "__main__":
                 sys.exit()
 
             while True:
-                message, channel = parse_slack_output(client.rtm_read(), bot)
+                message, channel = parse_slack_output(clients[bot['slack_key']].rtm_read(), bot)
                 if message and channel:
-                    handle_question(message, channel, bot, clients)
+                    handle_question(message, channel, bot, clients[bot['slack_key']])
                 time.sleep(READ_WEBSOCKET_DELAY)
 
         except Exception as e:
