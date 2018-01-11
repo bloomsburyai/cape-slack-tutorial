@@ -28,12 +28,12 @@ BOT_ID = 'mybotid' # Your bot's Slack ID
 READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 
 
-def handle_question(question, channel, bot, slack_client):
+def handle_question(question, channel, slack_client):
     slack_client.api_call("chat.postMessage", channel=channel,
                           text="Hello!", as_user=True)
 
 
-def parse_slack_output(slack_rtm_output, bot):
+def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless a message is
@@ -51,16 +51,16 @@ def parse_slack_output(slack_rtm_output, bot):
 
 
 if __name__ == "__main__":
-    try:
-        client = SlackClient(SLACK_KEY)
-        if client.rtm_connect():
-            print("Connected")
-        else:
-            print("Failed to connect")
-            sys.exit()
+    client = SlackClient(SLACK_KEY)
+    if client.rtm_connect():
+        print("Connected")
+    else:
+        print("Failed to connect")
+        sys.exit()
 
-        while True:
-            message, channel = parse_slack_output(client.rtm_read(), bot)
-            if message and channel:
-                handle_question(message, channel, bot, clients)
-            time.sleep(READ_WEBSOCKET_DELAY)
+    while True:
+        message, channel = parse_slack_output(client.rtm_read())
+        if message and channel:
+            handle_question(message, channel, client)
+        time.sleep(READ_WEBSOCKET_DELAY)
+
