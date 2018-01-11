@@ -31,11 +31,11 @@ BOT_ID = 'mybotid' # Your bot's Slack ID
 READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 
 
-cc = CapeClient()
+cape_client = CapeClient()
 
 
 def handle_question(question, channel, slack_client):
-    answers = cc.answer(question, CAPE_TOKEN)
+    answers = cape_client.answer(question, CAPE_TOKEN)
     if len(answers) > 0:
         slack_client.api_call("chat.postMessage", channel=channel,
                               text="%s (confidence: %0.2f)" % (answers[0]['answerText'], answers[0]['confidence']), as_user=True)
