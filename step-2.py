@@ -33,12 +33,15 @@ READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 
 
 def handle_question(question, channel, slack_client, cape_client):
+    # Retrieve a list of answers to the user's question
     answers = cape_client.answer(question, CAPE_TOKEN)
     if len(answers) > 0:
+        # Respond with the highest confidence answer
         slack_client.api_call("chat.postMessage", channel=channel,
                               text=answers[0]['answerText'],
                               as_user=True)
     else:
+        # No answer was found above the current confidence threshold
         slack_client.api_call("chat.postMessage", channel=channel,
                               text="Sorry! I don't know the answer to that.",
                               as_user=True)
