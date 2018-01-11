@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Copyright (c) 2017 Blemundsbury AI Limited
 #
 # Permission is hereby granted, free of charge, to any person obtaining
