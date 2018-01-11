@@ -36,10 +36,12 @@ def handle_question(question, channel, slack_client, cape_client):
     answers = cape_client.answer(question, CAPE_TOKEN)
     if len(answers) > 0:
         slack_client.api_call("chat.postMessage", channel=channel,
-                              text="%s (confidence: %0.2f)" % (answers[0]['answerText'], answers[0]['confidence']), as_user=True)
+                              text=answers[0]['answerText'],
+                              as_user=True)
     else:
         slack_client.api_call("chat.postMessage", channel=channel,
-                              text="Sorry! I don't know the answer to that.", as_user=True)
+                              text="Sorry! I don't know the answer to that.",
+                              as_user=True)
 
 
 def parse_slack_output(slack_rtm_output):
