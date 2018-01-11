@@ -34,7 +34,7 @@ READ_WEBSOCKET_DELAY = 1 # Delay in seconds between reading from firehose
 cc = CapeClient()
 
 
-def handle_question(question, channel, bot, slack_client):
+def handle_question(question, channel, slack_client):
     answers = cc.answer(question, CAPE_TOKEN)
     if len(answers) > 0:
         slack_client.api_call("chat.postMessage", channel=channel,
@@ -44,7 +44,7 @@ def handle_question(question, channel, bot, slack_client):
                               text="Sorry! I don't know the answer to that.", as_user=True)
 
 
-def parse_slack_output(slack_rtm_output, bot):
+def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless a message is
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         sys.exit()
 
     while True:
-        message, channel = parse_slack_output(client.rtm_read(), bot)
+        message, channel = parse_slack_output(client.rtm_read())
         if message and channel:
-            handle_question(message, channel, bot, client)
+            handle_question(message, channel, client)
         time.sleep(READ_WEBSOCKET_DELAY)
